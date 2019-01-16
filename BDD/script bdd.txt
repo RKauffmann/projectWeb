@@ -1,0 +1,205 @@
+#------------------------------------------------------------
+#        Script MySQL.
+#------------------------------------------------------------
+
+
+#------------------------------------------------------------
+# Table: Article
+#------------------------------------------------------------
+DROP DATABASE bddbde;
+CREATE DATABASE bddbde;
+CREATE TABLE Article(
+        IDarticle   Int  Auto_increment  NOT NULL ,
+        title       Varchar (25) NOT NULL ,
+        thumbnail   Text NOT NULL ,
+        price       DECIMAL (15,3)  NOT NULL ,
+        description Varchar (250) NOT NULL ,
+	nbVente     Int (5) NOT NULL ,
+        ts          TimeStamp NOT NULL
+	,CONSTRAINT Article_PK PRIMARY KEY (IDarticle)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: Status
+#------------------------------------------------------------
+
+CREATE TABLE Status(
+        IDstatus Int  Auto_increment  NOT NULL ,
+        status   Varchar (10) NOT NULL
+	,CONSTRAINT Status_PK PRIMARY KEY (IDstatus)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: User
+#------------------------------------------------------------
+
+CREATE TABLE Users(
+        IDuser     Int  Auto_increment  NOT NULL ,
+        name       Varchar (20) NOT NULL ,
+        first_name Varchar (25) NOT NULL ,
+        center     Varchar (15) NOT NULL ,
+        email      Text NOT NULL ,
+        password   Text NOT NULL ,
+        imgUser    Text NOT NULL ,
+        IDstatus   Int NOT NULL
+	,CONSTRAINT Users_PK PRIMARY KEY (IDuser)
+
+	,CONSTRAINT User_Status_FK FOREIGN KEY (IDstatus) REFERENCES Status(IDstatus)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: Event
+#------------------------------------------------------------
+
+CREATE TABLE Events(
+        IDevent     Int  Auto_increment  NOT NULL ,
+        name        Varchar (25) NOT NULL ,
+        description Text NOT NULL ,
+        date        Date NOT NULL ,
+        thumbnail   Text NOT NULL ,
+        content     Text NOT NULL ,
+        past        Boolean NOT NULL ,
+        IDuser      Int NOT NULL
+	,CONSTRAINT Events_PK PRIMARY KEY (IDevent)
+
+	,CONSTRAINT Events_Users_FK FOREIGN KEY (IDuser) REFERENCES Users(IDuser)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: idea
+#------------------------------------------------------------
+
+CREATE TABLE idea(
+        IDidea  Int  Auto_increment  NOT NULL ,
+        content Text NOT NULL ,
+        ts      TimeStamp NOT NULL ,
+        IDuser  Int NOT NULL
+	,CONSTRAINT idea_PK PRIMARY KEY (IDidea)
+
+	,CONSTRAINT idea_Users_FK FOREIGN KEY (IDuser) REFERENCES Users(IDuser)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: Tag
+#------------------------------------------------------------
+
+CREATE TABLE Tag(
+        IDtag Int  Auto_increment  NOT NULL ,
+        name  Varchar (10) NOT NULL
+	,CONSTRAINT Tag_PK PRIMARY KEY (IDtag)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: image
+#------------------------------------------------------------
+
+CREATE TABLE image(
+        IDcomment Int  Auto_increment  NOT NULL ,
+        content   Text NOT NULL ,
+        ts        TimeStamp NOT NULL ,
+        IDuser    Int NOT NULL ,
+        IDevent   Int NOT NULL
+	,CONSTRAINT image_PK PRIMARY KEY (IDcomment)
+
+	,CONSTRAINT image_Users_FK FOREIGN KEY (IDuser) REFERENCES Users(IDuser)
+	,CONSTRAINT image_Events0_FK FOREIGN KEY (IDevent) REFERENCES Events(IDevent)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: Comment
+#------------------------------------------------------------
+
+CREATE TABLE Comment(
+        IDcomment       Int  Auto_increment  NOT NULL ,
+        content         Text NOT NULL ,
+        ts              TimeStamp NOT NULL ,
+        IDuser          Int NOT NULL ,
+        IDevent         Int ,
+        IDcomment_image Int
+	,CONSTRAINT Comment_PK PRIMARY KEY (IDcomment)
+
+	,CONSTRAINT Comment_Users_FK FOREIGN KEY (IDuser) REFERENCES Users(IDuser)
+	,CONSTRAINT Comment_Events0_FK FOREIGN KEY (IDevent) REFERENCES Events(IDevent)
+	,CONSTRAINT Comment_image1_FK FOREIGN KEY (IDcomment_image) REFERENCES image(IDcomment)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: Ordere
+#------------------------------------------------------------
+
+CREATE TABLE Ordere(
+        IDarticle Int NOT NULL ,
+        IDuser    Int NOT NULL ,
+        quantity  Int NOT NULL
+	,CONSTRAINT Ordere_PK PRIMARY KEY (IDarticle,IDuser)
+
+	,CONSTRAINT Ordere_Article_FK FOREIGN KEY (IDarticle) REFERENCES Article(IDarticle)
+	,CONSTRAINT Ordere_Users0_FK FOREIGN KEY (IDuser) REFERENCES Users(IDuser)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: attendee
+#------------------------------------------------------------
+
+CREATE TABLE attendee(
+        IDevent Int NOT NULL ,
+        IDuser  Int NOT NULL
+	,CONSTRAINT attendee_PK PRIMARY KEY (IDevent,IDuser)
+
+	,CONSTRAINT attendee_Events_FK FOREIGN KEY (IDevent) REFERENCES Events(IDevent)
+	,CONSTRAINT attendee_Users0_FK FOREIGN KEY (IDuser) REFERENCES Users(IDuser)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: decrire
+#------------------------------------------------------------
+
+CREATE TABLE decrire(
+        IDtag     Int NOT NULL ,
+        IDarticle Int NOT NULL
+	,CONSTRAINT decrire_PK PRIMARY KEY (IDtag,IDarticle)
+
+	,CONSTRAINT decrire_Tag_FK FOREIGN KEY (IDtag) REFERENCES Tag(IDtag)
+	,CONSTRAINT decrire_Article0_FK FOREIGN KEY (IDarticle) REFERENCES Article(IDarticle)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: voteidea
+#------------------------------------------------------------
+
+CREATE TABLE vote(
+        IDidea   Int NOT NULL ,
+        IDuser   Int NOT NULL ,
+        reaction Boolean
+	,CONSTRAINT voteidea_PK PRIMARY KEY (IDidea,IDuser)
+
+	,CONSTRAINT voteidea_idea_FK FOREIGN KEY (IDidea) REFERENCES idea(IDidea)
+	,CONSTRAINT voteidea_Users0_FK FOREIGN KEY (IDuser) REFERENCES Users(IDuser)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: voteimg
+#------------------------------------------------------------
+
+CREATE TABLE voteimg(
+        IDcomment Int NOT NULL ,
+        IDuser    Int NOT NULL ,
+        reaction  Boolean
+	,CONSTRAINT _voteimg_PK PRIMARY KEY (IDcomment,IDuser)
+
+	,CONSTRAINT _voteimg_image_FK FOREIGN KEY (IDcomment) REFERENCES image(IDcomment)
+	,CONSTRAINT _voteimg_Users0_FK FOREIGN KEY (IDuser) REFERENCES Users(IDuser)
+)ENGINE=InnoDB;
+
