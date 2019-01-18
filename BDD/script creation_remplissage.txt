@@ -37,8 +37,8 @@ CREATE TABLE Status(
 #------------------------------------------------------------
 
 CREATE TABLE Users(
-        IDuser     Int  Auto_increment  NOT NULL ,
-        
+        IDuser     Int    NOT NULL,
+        IDstatus Int NOT NULL
 	,CONSTRAINT Users_PK PRIMARY KEY (IDuser)
 
 	,CONSTRAINT Users_Status_FK FOREIGN KEY (IDstatus) REFERENCES Status(IDstatus)
@@ -93,7 +93,7 @@ CREATE TABLE Events(
         date          Date NOT NULL ,
         thumbnail     Text NOT NULL ,
         content       Text NOT NULL ,
-        past          Bool NOT NULL ,
+        past          Boolean NOT NULL ,
         price         Int ,
         IDuser        Int NOT NULL ,
         IDpunctuality Int NOT NULL
@@ -190,7 +190,7 @@ CREATE TABLE DescribArticle(
 CREATE TABLE VoteIdea(
         IDidea   Int NOT NULL ,
         IDuser   Int NOT NULL ,
-        reaction Bool
+        reaction Boolean
 	,CONSTRAINT VoteIdea_PK PRIMARY KEY (IDidea,IDuser)
 
 	,CONSTRAINT VoteIdea_Idea_FK FOREIGN KEY (IDidea) REFERENCES Idea(IDidea)
@@ -205,7 +205,7 @@ CREATE TABLE VoteIdea(
 CREATE TABLE VoteImg(
         IDcomment Int NOT NULL ,
         IDuser    Int NOT NULL ,
-        reaction  Bool
+        reaction  Boolean
 	,CONSTRAINT VoteImg_PK PRIMARY KEY (IDcomment,IDuser)
 
 	,CONSTRAINT VoteImg_Image_FK FOREIGN KEY (IDcomment) REFERENCES Image(IDcomment)
