@@ -38,6 +38,12 @@ CREATE TABLE Status(
 
 CREATE TABLE Users(
         IDuser     Int    NOT NULL,
+  name       Varchar (20) NOT NULL ,
+        first_name Varchar (25) NOT NULL ,
+        center     Varchar (15) NOT NULL ,
+        email      Text NOT NULL ,
+        password   Text NOT NULL ,
+        imgUser    Text NOT NULL,
         IDstatus Int NOT NULL
 	,CONSTRAINT Users_PK PRIMARY KEY (IDuser)
 
