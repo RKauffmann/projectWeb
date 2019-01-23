@@ -1,0 +1,12 @@
+DROP DATABASE bddnation;
+CREATE DATABASE bddnation;
+CREATE TABLE Users(
+        IDuser     Int  Auto_increment  NOT NULL ,
+        name       Varchar (20) NOT NULL ,
+        first_name Varchar (25) NOT NULL ,
+        center     Varchar (15) NOT NULL ,
+        email      Text NOT NULL ,
+        password   Text NOT NULL ,
+        imgUser    Text NOT NULL 
+	,CONSTRAINT Users_PK PRIMARY KEY (IDuser)
+)ENGINE=InnoDB;
